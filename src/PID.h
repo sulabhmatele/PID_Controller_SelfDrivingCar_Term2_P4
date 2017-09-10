@@ -3,6 +3,8 @@
 
 class PID {
 public:
+
+    int steps;
   /*
   * Errors
   */
@@ -41,6 +43,8 @@ public:
   * Calculate the total PID error.
   */
   double TotalError();
+
+  double LimitVal(double max, double min, double val);
 };
 
 #endif /* PID_H */
