@@ -39,6 +39,8 @@ int main()
   double cal_Kd = 1;
 
   // TODO: Initialize the pid variable.
+    throttle_pid.Init(0.03, 0, 0);
+    pid.Init(cal_Kp, cal_Ki, cal_Kd); // Kp, Ki, Kd
 
   h.onMessage([&pid, &throttle_pid, cal_Kp, cal_Ki, cal_Kd](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -58,7 +60,7 @@ int main()
           std::cout << "speed: " << speed << " angle: " << angle << std::endl;
           double steer_value = 0;
           double throttle_val = 0.3;
-          const double target_speed = 22.0;
+          const double target_speed = 20.0;
           /*
           * TODO: Calcuate steering value here, remember the steering value is
           * [-1, 1].
@@ -66,16 +68,25 @@ int main()
           * another PID controller to control the speed!
           */
 
-          throttle_pid.Init(0.03, 0, 0);
           throttle_pid.UpdateError(speed - target_speed);
           throttle_val = throttle_pid.TotalError();
           throttle_val = pid.LimitVal(1, -1, throttle_val);
 
-          pid.Init(cal_Kp, cal_Ki, cal_Kd); // Kp, Ki, Kd
+          if(pid.numOfReadings > 20)
+          {
+              pid.Twiddle(cte); // This should be called before UpdateErr()
+              pid.numOfReadings = 0;
+          }
+          else
+          {
+              pid.numOfReadings++;
+          }
+
+          std::cout << "best_err: " << pid.best_err <<" ,Kp: " << pid.Kp << " , Ki: " << pid.Ki << " , Kd: " << pid.Kd << std::endl;
+          std::cout << " ,prob Kp: " << pid.prob_param[0] << " , prob Ki: " << pid.prob_param[1] << " , prob Kd: " << pid.prob_param[2] << std::endl;
           pid.UpdateError(cte);
           steer_value = pid.TotalError();
           steer_value = pid.LimitVal(1, -1, steer_value);
-          pid.steps = 0;
 
           // DEBUG
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;

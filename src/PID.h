@@ -4,13 +4,19 @@
 class PID {
 public:
 
-    int steps;
+    int numOfReadings;
+    int step_id;
+    int param_id;
+    double prob_param[3];
+    double params[3];
+    double tol;
   /*
   * Errors
   */
   double p_error;
   double i_error;
   double d_error;
+  double best_err;
 
   /*
   * Coefficients
@@ -45,6 +51,8 @@ public:
   double TotalError();
 
   double LimitVal(double max, double min, double val);
+
+  void Twiddle(double cte);
 };
 
 #endif /* PID_H */
