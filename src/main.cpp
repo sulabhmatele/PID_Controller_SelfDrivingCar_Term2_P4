@@ -54,22 +54,22 @@ int main()
             std::cout << "speed: " << speed << " angle: " << angle << std::endl;
             double steer_value = 0;
             double throttle_val = 0.3;
-            const double target_speed = 18.0;
+            const double target_speed = 20.0;
           /*
           * TODO: Calcuate steering value here, remember the steering value is
           * [-1, 1].
           * NOTE: Feel free to play around with the throttle and speed. Maybe use
           * another PID controller to control the speed!
           */
-          if (pid.steps > 2) {
 
-              throttle_pid.Init(0.1, 0, 0);
-              throttle_pid.UpdateError(speed - target_speed);
-              throttle_val = throttle_pid.TotalError();
+          throttle_pid.Init(0.05, 0, 0);
+          throttle_pid.UpdateError(speed - target_speed);
+          throttle_val = throttle_pid.TotalError();
 
-              throttle_val = pid.LimitVal(1, -1, throttle_val);
+          throttle_val = pid.LimitVal(1, -1, throttle_val);
 
-              pid.Init(0.3, 0, 4); // Kp, Ki, Kd
+          if (pid.steps >= 0) {
+              pid.Init(1, 0.01, 1); // Kp, Ki, Kd
               pid.UpdateError(cte);
               steer_value = pid.TotalError();
               steer_value = pid.LimitVal(1, -1, steer_value);
