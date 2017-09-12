@@ -34,12 +34,12 @@ int main()
 
   PID pid;
   PID throttle_pid = PID();
-  double cal_Kp = 1;
-  double cal_Ki = 0.01;
-  double cal_Kd = 1;
+  double cal_Kp = 0.4;
+  double cal_Ki = 0.001;
+  double cal_Kd = 4;
 
   // TODO: Initialize the pid variable.
-    throttle_pid.Init(0.03, 0, 0);
+    throttle_pid.Init(0.02, 0, 0);
     pid.Init(cal_Kp, cal_Ki, cal_Kd); // Kp, Ki, Kd
 
   h.onMessage([&pid, &throttle_pid, cal_Kp, cal_Ki, cal_Kd](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
@@ -60,7 +60,7 @@ int main()
           std::cout << "speed: " << speed << " angle: " << angle << std::endl;
           double steer_value = 0;
           double throttle_val = 0.3;
-          const double target_speed = 20.0;
+          const double target_speed = 22.0;
           /*
           * TODO: Calcuate steering value here, remember the steering value is
           * [-1, 1].
@@ -72,7 +72,7 @@ int main()
           throttle_val = throttle_pid.TotalError();
           throttle_val = pid.LimitVal(1, -1, throttle_val);
 
-          if(pid.numOfReadings > 20)
+          if(pid.numOfReadings > 500 && fabs(cte) > 0.25)
           {
               pid.Twiddle(cte); // This should be called before UpdateErr()
               pid.numOfReadings = 0;

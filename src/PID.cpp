@@ -14,21 +14,17 @@ PID::PID() {
     param_id = 0;
     best_err = 10000; // Considering that, cte > 2.6 takes car out of road
 
-    prob_param[0] = 1;
+    prob_param[0] = 0.1;
     prob_param[1] = 1;
-    prob_param[2] = 1;
-
-    params[0] = Kp;
-    params[1] = Ki;
-    params[2] = Kd;
+    prob_param[2] = 0.01;
 }
 
 PID::~PID() {}
 
 void PID::Twiddle(double err)
 {
-/*    err = fabs(err);
-    best_err = fabs(best_err);*/
+    err = fabs(err);
+    best_err = fabs(best_err);
 
     double sum = prob_param[0] + prob_param[1] + prob_param[2];
     if(sum > tol)
@@ -80,8 +76,8 @@ void PID::Twiddle(double err)
         }
 
         Kp = params[0];
-        Ki = params[1];
-        Kd = params[2];
+        Kd = params[1];
+        Ki = params[2];
     }
 }
 
@@ -93,6 +89,10 @@ void PID::Init(double Kp, double Ki, double Kd) {
     this->Kp = Kp;
     this->Ki = Ki;
     this->Kd = Kd;
+
+    params[0] = Kp;
+    params[1] = Kd;
+    params[2] = Ki;
 }
 
 void PID::UpdateError(double cte)
