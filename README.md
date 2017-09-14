@@ -1,7 +1,9 @@
 # PID_Controller_SelfDrivingCar_Term2_P4
 This repo contains the submissions and related material for Udacity "Self Driving Car" Nano degree program's Term 2 - Project 4, "PID_Controller"
 
-###Introduction
+![alt text](https://github.com/sulabhmatele/PID_Controller_SelfDrivingCar_Term2_P4/blob/master/ProjectScreenShot.png)
+
+### Introduction
 
 This project implements the basic PID controller, which is used to control the steering wheel angle and also the speed of the car, based on the cte (cross talk error) provided by the simulation.
 The implementation logic is concentrated on tuning the 3 parameters :
