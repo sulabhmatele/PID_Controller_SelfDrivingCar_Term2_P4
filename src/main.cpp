@@ -35,7 +35,7 @@ int main()
   PID pid;
   PID throttle_pid = PID();
   double cal_Kp = 0.4;
-  double cal_Ki = 0.001;
+  double cal_Ki = 0.00001;
   double cal_Kd = 4;
 
   // TODO: Initialize the pid variable.
@@ -60,13 +60,7 @@ int main()
           std::cout << "speed: " << speed << " angle: " << angle << std::endl;
           double steer_value = 0;
           double throttle_val = 0.3;
-          const double target_speed = 22.0;
-          /*
-          * TODO: Calcuate steering value here, remember the steering value is
-          * [-1, 1].
-          * NOTE: Feel free to play around with the throttle and speed. Maybe use
-          * another PID controller to control the speed!
-          */
+          const double target_speed = 32.0;
 
           throttle_pid.UpdateError(speed - target_speed);
           throttle_val = throttle_pid.TotalError();
@@ -82,8 +76,9 @@ int main()
               pid.numOfReadings++;
           }
 
-          std::cout << "best_err: " << pid.best_err <<" ,Kp: " << pid.Kp << " , Ki: " << pid.Ki << " , Kd: " << pid.Kd << std::endl;
-          std::cout << " ,prob Kp: " << pid.prob_param[0] << " , prob Ki: " << pid.prob_param[1] << " , prob Kd: " << pid.prob_param[2] << std::endl;
+          std::cout << "best_err: " << pid.best_err <<" ,Kp: " << pid.Kp << " , Kd: " << pid.Kd << " , Ki: " << pid.Ki << std::endl;
+          std::cout << " ,prob Kp: " << pid.prob_param[0] << " , prob Kd: " << pid.prob_param[1] << " , prob Ki: " << pid.prob_param[2] << std::endl;
+
           pid.UpdateError(cte);
           steer_value = pid.TotalError();
           steer_value = pid.LimitVal(1, -1, steer_value);

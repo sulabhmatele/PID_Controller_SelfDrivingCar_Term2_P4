@@ -3,20 +3,16 @@
 
 using namespace std;
 
-/*
-* TODO: Complete the PID class.
-*/
-
 PID::PID() {
     numOfReadings = 0;
     tol = 0.2; // As suggested in lesson
-    step_id = 1;
-    param_id = 0;
+    step_id = 1; // Keeps track of step of twiddle
+    param_id = 0; // Keeps track of which param to change in twiddle
     best_err = 10000; // Considering that, cte > 2.6 takes car out of road
 
-    prob_param[0] = 0.1;
-    prob_param[1] = 1;
-    prob_param[2] = 0.01;
+    prob_param[0] = 0.1; // prob_Kp
+    prob_param[1] = 1; // prob_Kd
+    prob_param[2] = 0.001;// prob_Ki
 }
 
 PID::~PID() {}
